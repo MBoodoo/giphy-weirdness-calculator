@@ -1,9 +1,10 @@
 import axios from "axios"
+import uuid from "uuid"
 
 const API_KEY = "yzXM4tFFVbMqnsOOQMBQr2XPjHjTUNZz"
 
 const RANDOM_ID_URL = "https://api.giphy.com/v1/randomid"
-const SEARCH_URL = "api.giphy.com/v1/gifs/translate"
+const SEARCH_URL = "https://api.giphy.com/v1/gifs/translate"
 
 const getRandomID = () => {
     return axios.get(RANDOM_ID_URL, {
@@ -19,19 +20,26 @@ const getRandomID = () => {
         })
 }
 
-const search = async (random_id, weirdness, s) => {
-    await axios.get(SEARCH_URL, {
-        api_key: API_KEY,
-        random_id,
-        weirdness,
-        s 
+const search = (random_id, weirdness, s) => {
+    return axios.get(SEARCH_URL, {
+        params: {
+            api_key: API_KEY,
+            random_id,
+            weirdness,
+            s
+        }
     })
         .then(res => {
-            return res.data.images.downsized_large.url
+            return {
+                url: res.data.data.images.downsized_large.url, 
+                title: res.data.data.title,
+                id: uuid(),
+                liked: false
+            }
         })
 }
 
 export {
     getRandomID,
-    search
+    search,
 }

@@ -1,7 +1,0 @@
-const defaultState = {
-
-}
-
-const reducer = () => {
-    
-}
