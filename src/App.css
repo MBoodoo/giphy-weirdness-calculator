@@ -1,5 +1,18 @@
 .App {
   text-align: center;
+  display: grid;
+  grid-gap: 3em;
+  grid-template-columns: 57vw 39vw;
+  grid-template-rows: 47vh 47vh;
+  grid-template-areas:  "search likes"
+                        "result likes"
 }
 
+.App > * {
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  background: #F1F0EA;
+}
 
+body {
+  background: linear-gradient(to right, #ffafbd, #ffc3a0);
+}

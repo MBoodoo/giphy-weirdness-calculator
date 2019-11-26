@@ -1,6 +1,4 @@
 import { combineReducers } from 'redux'
 import gifReducer from './gifReducer'
 
-export default combineReducers({
-  gifReducer,
-})
+export default combineReducers({gifReducer})

@@ -1,12 +1,12 @@
-import { getRandomID } from "../service/api"
+import { getRandomID } from "../service"
 import { TOGGLE_LIKE, FETCH_GIFS } from "../actions"
 
-const initState = {
+export const initState = {
     currentId: getRandomID(),
+    currentSearch: "",
     fetchedGifs: [],
-    isFetching: false,
-    error: null,
-    weirdnessScore: 0
+    likedGifs: [],
+    weirdnessScore: 0,
 }
 
 const gifReducer = (state = initState, action) => {
@@ -14,17 +14,24 @@ const gifReducer = (state = initState, action) => {
         case FETCH_GIFS:
             return {
                 ...state,
-                fetchedGifs: action.payload
+                fetchedGifs: action.payload,
+                currentSearch: action.query
             }
         case TOGGLE_LIKE:
             return {
                 ...state,
-                fetchedGifs: state.fetchedGifs.map(gif => 
-                    (gif.id === action.id)
-                        ? {...gif, liked: !gif.liked}
-                        : gif
-                )
+                likedGifs: [
+                    action.payload,
+                    ...state.likedGifs
+                        .filter(({query, id}) => 
+                            (query != action.payload.query ||
+                            state.currentSearch != action.payload.query) && 
+                            id != action.payload.id
+                        )
+                ]
             }
+        default: 
+            return state
     }
 }
 export default gifReducer

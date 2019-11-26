@@ -1,21 +1,7 @@
-import { search } from "../service/api"
+import { search } from "../service"
 
 export const FETCH_GIFS = 'FETCH_GIFS'
-export const FETCH_GIFS_PENDING = 'FETCH_GIFS_PENDING'
-export const FETCH_GIFS_ERROR = 'FETCH_GIFS_ERROR'
 export const TOGGLE_LIKE = "TOGGLE_LIKE"
-
-const gifsPending = () => {
-    return {
-        type: FETCH_GIFS_PENDING
-    }
-}
-
-const fetchGifsError = () => {
-    return {
-        type: FETCH_GIFS_ERROR
-    }
-}
 
 const fetchGifs = async (id, string) => {
     let gifs = []
@@ -25,14 +11,15 @@ const fetchGifs = async (id, string) => {
     }
     return await {
         payload: gifs,
-        type: FETCH_GIFS
+        type: FETCH_GIFS,
+        query: string
     }
 }
 
-const toggleLike = id => {
+const toggleLike = (payload) => {
     return {
         type: TOGGLE_LIKE,
-        id
+        payload
     }
 }
 

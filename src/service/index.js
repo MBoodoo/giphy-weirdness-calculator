@@ -15,9 +15,7 @@ const getRandomID = () => {
         .then(res => {
             return res.data.data.random_id
         })
-        .catch(err => {
-            console.error(err)
-        })
+        .catch(err => console.error(err))
 }
 
 const search = (random_id, weirdness, s) => {
@@ -37,6 +35,7 @@ const search = (random_id, weirdness, s) => {
                 liked: false
             }
         })
+        .catch(err => console.error(err))
 }
 
 export {
