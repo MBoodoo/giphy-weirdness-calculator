@@ -49,9 +49,6 @@ const Loading = styled.div`
 
 `
 
-const Input = styled.input`
-
-`
 const Container = styled.div`
     grid-area: search;
     display: flex;

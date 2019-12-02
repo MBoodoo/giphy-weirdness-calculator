@@ -1,26 +1,39 @@
-import React, { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import React from "react"
+import { useDispatch } from "react-redux"
 import { toggleLike } from "../actions"
 import styled from "styled-components"
 
 export interface IGif {
-    title: String
+    title: string
     url: string,
     id: string,
+    liked: boolean,
+    query: string
+    weirdness: Number
 }
 
-const Gif: React.FC<IGif> = ({ title, url, id }) => {
-    const [liked, setLiked] = useState(false)
+const Gif: React.FC<IGif> = ({ 
+    title, 
+    url, 
+    id, 
+    liked, 
+    query,
+    weirdness
+}) => {
     // Get dispatch
     const dispatch = useDispatch()
-    const query = useSelector((state: any) => 
-        state.gifReducer.currentSearch
-    )
+
     const handleLike = () => {
+
         dispatch(
-            toggleLike({ id, url, title, query})
+            toggleLike({ 
+                id, 
+                url, 
+                title, 
+                query, 
+                weirdness
+            })
         )
-        setLiked(!liked)
     }
 
     return  <Container>
@@ -46,6 +59,7 @@ const Img = styled.img`
     border: 1px solid black;
     width: 15em;
     height: 12em;
+    place-self: center center;
 `
 const Like = styled.div`
     width: 5em;
@@ -58,10 +72,6 @@ const Like = styled.div`
         cursor: pointer;
         background: #ffc3a0;
     }
-
-
-
-
 `
 
 export default Gif

@@ -32,7 +32,8 @@ const search = (random_id, weirdness, s) => {
                 url: res.data.data.images.downsized_large.url, 
                 title: res.data.data.title,
                 id: uuid(),
-                liked: false
+                query: s,
+                weirdness
             }
         })
         .catch(err => console.error(err))

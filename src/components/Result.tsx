@@ -5,8 +5,9 @@ import { motion, useMotionValue, useTransform } from "framer-motion"
 import Gif, { IGif } from "./Gif"
 
 const Result:  React.FC = () => {
-    // Select gifs from store
-    const selectFetchedGifs = useSelector((state: any) => state.gifReducer.fetchedGifs, shallowEqual)
+    // Select gifs and liked gifs from store
+    const fetchedGifs = useSelector((state: any) => state.gifReducer.fetchedGifs, shallowEqual)
+    const likedGifs = useSelector((state: any) => state.gifReducer.likedGifs, shallowEqual)
 
     // Init weird index for slider
     const [weirdIdx, setWeirdIdx] = useState(0)
@@ -21,13 +22,19 @@ const Result:  React.FC = () => {
     useEffect(() => 
         sliderValue.onChange(latest => {
             setWeirdIdx(Math.floor(latest))
-    }), [])
+    }), [sliderValue])
     
-    // Make all gif data into gif components
-    const gifs = selectFetchedGifs.map((gif: IGif) => {
+    // Make all gif data into gif components and set the liked prop
+    // based on if that gif exists in the overall 'liked gifs' array
+    const gifs = fetchedGifs.map((gif: IGif) => {
         return <Gif id={gif.id} 
                     title={gif.title}
                     url={gif.url}
+                    liked={
+                        likedGifs.findIndex((liked: IGif) => liked.id === gif.id) !== -1
+                    }
+                    query={gif.query}
+                    weirdness={gif.weirdness}
                 />
     })
 
