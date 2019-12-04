@@ -1,19 +1,27 @@
 import React from 'react';
 import './App.css';
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 import SearchArea from "./components/Search"
-import Result from "./components/Result"
+import PickGif from "./components/PickGif"
 import Liked from "./components/Liked"
 
 const App: React.FC = () => {
-  // useDispatch()
+
   
   return (
     <div className="App">
-      <SearchArea/>
-      <Result />
-      <Liked />
-
+      <Router>
+        <SearchArea/>
+        <PickGif />
+        <Liked />
+      </Router>
     </div>
   );
 }

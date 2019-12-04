@@ -6,7 +6,7 @@ import styled from "styled-components"
 import { motion, useMotionValue, useTransform } from "framer-motion"
 import Gif from "./Gif"
 
-const Result:  React.FC = () => {
+const PickGif:  React.FC = () => {
     // Select gifs and liked gifs from store
     const fetchedGifs = useSelector((state: any) => state.gifReducer.fetchedGifs, shallowEqual)
     const likedGifs = useSelector((state: any) => state.gifReducer.likedGifs, shallowEqual)
@@ -95,4 +95,4 @@ const Slider = styled.div`
 
 ` 
 
-export default Result 
+export default PickGif

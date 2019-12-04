@@ -27,6 +27,7 @@ const containerVariants = {
     }
 }
 
+//////////
 const Liked: React.FC = () => {
 
     const [expanded, toggleExpanded] = useCycle(false, true)
@@ -57,6 +58,7 @@ const Liked: React.FC = () => {
              />
     }) 
 
+    // If a gif is unliked then close the expanded pane
     useEffect(() => {
         if (gifs.length < 5 && expanded) {
             toggleExpanded()
@@ -68,7 +70,6 @@ const Liked: React.FC = () => {
                 animate={expanded ? "expanded" : "default"}
                 variants={containerVariants}
             >
-                <Router>
                     {gifs}
                     { gifs.length >= 5 &&
                         <Calculate onClick={() => handleClick()}>
@@ -83,26 +84,24 @@ const Liked: React.FC = () => {
                         </Calculate>
                     }
                     { expanded &&
-                        <Switch>
-                            <Route path="/results">
-                                <Score>
-                                You scored a {weirdnessScore} out of 10 on the weirdness scale!
-                                </Score>
-                            </Route>
-                        </Switch> 
+            
+                    
+                        <Score>
+                            You scored a {weirdnessScore} out of 10 on the weirdness scale!
+                        </Score>
                     }
-                </Router>
             </Container>
 }
 
 const Calculate = styled.div`
     position: fixed;
     top: 10%;
-    padding: 1em;
     background: #ffc3a0;
     & > * {
         text-decoration: none;
         color: black;
+        display: inline-block;
+        padding: 1em;
     }
     &:hover {
         cursor: pointer;

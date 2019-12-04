@@ -24,7 +24,8 @@ interface IFulfilled extends Action {
 }
 
 interface IFailed extends Action {
-    type: typeof FAILED
+    type: typeof FAILED,
+    payload: IGif
 }
 
 interface IToggle extends Action {
@@ -47,7 +48,7 @@ export type GifAction =
 
 const fetchGifs = ( 
     id: string, 
-    input: string
+    query: string
 ): ThunkAction<
     Promise<IFulfilled | IFailed>, // Type of last action dispatched
     IGif[], 
@@ -62,12 +63,16 @@ const fetchGifs = (
      
     let gifs: IGif[] = []
     for (let i = 0; i <= 10; i++ ) {
-        const gif = await search(id, i, input) as IGif || null
+        let gif = await search(id, i, query) as IGif 
+        
+        if (!gif) {
+            const failingAction = dispatch(gifFailed(query, i))
+            gif = failingAction.payload
+        }
+
         gifs.push(gif)
     }
-
     // unknown errors logged in console but not added to state
-    // will fix issue that dispatches failed action on pending promise 
 
     return await dispatch(gifsFetched(gifs)) 
 }   
@@ -79,9 +84,18 @@ const fetchingGifs = () => {
     return action
 }
 
-const gifsFailed = () => {
+const gifFailed = (query: string, weirdness: number ) => {
+
+    const failingPayload: IGif = {
+        title: "Sorry, the gif you searched could not be fetched",
+        url: "https://media2.giphy.com/media/14uQ3cOFteDaU/giphy.gif?cid=5a210f27722f0840414ceec4be24a3e41e2de1cb5c7468f9&rid=giphy.gif",
+        id: "", // empty ID means there is an error
+        query,
+        weirdness
+    }
     let action: IFailed = {
-        type: FAILED
+        type: FAILED,
+        payload: failingPayload
     }
     return action
 }

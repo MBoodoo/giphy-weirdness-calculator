@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useLayoutEffect } from "react"
 import { useDispatch } from "react-redux"
 import { toggleLike } from "../actions"
 import styled from "styled-components"
@@ -16,6 +16,15 @@ const Gif: React.FC<IGif> = ({
 }) => {
 
     const dispatch = useDispatch()
+    const [error, setError] = useState(false)
+
+    useLayoutEffect(() => {
+        setError(
+            id === "" || id === null || id === undefined
+            ? true
+            : false
+        )
+    }, [id])
 
     const handleLike = () => {
         dispatch(
@@ -32,12 +41,17 @@ const Gif: React.FC<IGif> = ({
     return  <Container>
                 <div>{title}</div>
                 <Img src={url} />
-                <Like onClick={() => handleLike()}>
-                    {!liked ? 'Like' : 'Unlike'}
-                </Like>
-                <Score>
-                    {weirdness} / 10
-                </Score>
+                { !error &&
+                    <>
+                        <Like onClick={() => handleLike()}>
+                            {!liked ? 'Like' : 'Unlike'}
+                        </Like>
+                        <Score>
+                            {weirdness} / 10
+                        </Score>
+                    </>
+                }
+                
             </Container>
 }
 
