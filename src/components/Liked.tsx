@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { calcWeirdness } from "../actions"
 import { IGif } from "../reducers/gifReducer"
@@ -8,12 +8,28 @@ import {
     Route,
     Link
   } from "react-router-dom";
+
 import styled from "styled-components"
+import { motion, useCycle } from "framer-motion"
 import Gif from "./Gif"
+
+const containerVariants = {
+    default: {
+        width: `auto`,
+        x: 0,
+    },
+    expanded: {
+        width: `100vw`,
+        x: `-60%`,
+        transition: {
+            type: "spring",
+          }
+    }
+}
 
 const Liked: React.FC = () => {
 
-    const [expanded, setExpanded] = useState(false)
+    const [expanded, toggleExpanded] = useCycle(false, true)
 
     const dispatch = useDispatch()
     const likedGifs = useSelector((state: any) => 
@@ -23,8 +39,8 @@ const Liked: React.FC = () => {
         state.gifReducer.weirdnessScore
     )
 
-    const handleClick = async () => {
-        setExpanded(!expanded)
+    const handleClick = () => {
+        toggleExpanded()
         dispatch(calcWeirdness())
     }
 
@@ -40,15 +56,30 @@ const Liked: React.FC = () => {
                 key={gif.id}
              />
     }) 
+
+    useEffect(() => {
+        if (gifs.length < 5 && expanded) {
+            toggleExpanded()
+        }
+    }, [gifs])
     
-    return  <Container>
+    return  <Container 
+                initial={false}
+                animate={expanded ? "expanded" : "default"}
+                variants={containerVariants}
+            >
                 <Router>
                     {gifs}
                     { gifs.length >= 5 &&
                         <Calculate onClick={() => handleClick()}>
-                            <Link to="/results">
-                                Calculate Weirdness!
-                            </Link>
+                            {!expanded ? 
+                                <Link to="/results">
+                                    Calculate Weirdness!
+                                </Link> :
+                                <Link to="/">
+                                    Back to Search
+                                </Link> 
+                            } 
                         </Calculate>
                     }
                     { expanded &&
@@ -58,7 +89,7 @@ const Liked: React.FC = () => {
                                 You scored a {weirdnessScore} out of 10 on the weirdness scale!
                                 </Score>
                             </Route>
-                        </Switch>     
+                        </Switch> 
                     }
                 </Router>
             </Container>
@@ -71,17 +102,28 @@ const Calculate = styled.div`
     background: #ffc3a0;
     & > * {
         text-decoration: none;
+        color: black;
     }
     &:hover {
         cursor: pointer;
     }
 `
-const Container = styled.div`
+const Container = styled(motion.div)`
     grid-area: likes;
-    diplay: flex;
+    display: grid;
+    grid-template-rows: repeat(1fr);
+    grid-template-columns: repeat(auto-fill, minmax(25em, 1fr));
+    grid-gap: 1em;
     overflow-y: scroll;
 `
 const Score = styled.div`
-    border: 1px solid black;
+    place self: center center;
+    padding: .5em;
+    background: linear-gradient(to right, #ffafbd, #ffc3a0);
+    font-size: 20px;
+    width: 12em;
+    max-height: 5em;
+    line-height: 20px;
+
 `
 export default Liked 

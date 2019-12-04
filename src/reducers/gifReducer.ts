@@ -3,19 +3,24 @@ import {
     TOGGLE_LIKE, 
     FETCHING,
     FULFILLED,
+    FAILED,
     CALC_WEIRDNESS,  
     GifAction
 } from "../actions"
 
-// Move to .d.ts
+// Move to *.d.ts
 
 export interface IGif {
     title: string
     url: string,
     id: string,
-    liked?: boolean, // Conditional for rendering liked in prop
+    liked?: boolean, // Conditional for rendering "liked" when used for props
     query: string
     weirdness: number
+}
+
+export interface IScoreHistory {
+
 }
 
 export interface IState{
@@ -23,16 +28,17 @@ export interface IState{
     readonly fetchedGifs: IGif[],
     readonly likedGifs: IGif[],
     readonly weirdnessScore: number, 
-    readonly isLoading: Boolean
+    readonly isLoading: Boolean,
+    readonly fetchFailed: Boolean
 }
-
 
 export const initState: IState = {
     currentId: getRandomID(),
     fetchedGifs: [],
     likedGifs: [],
     weirdnessScore: 0, 
-    isLoading: false
+    isLoading: false,
+    fetchFailed: false
 }
 
 const gifReducer = (state = initState, action: GifAction) => {
@@ -42,11 +48,18 @@ const gifReducer = (state = initState, action: GifAction) => {
                 ...state,
                 isLoading: true
             }
+        case FAILED:
+            return {
+                ...state,
+                isLoading: false,
+                fetchFailed: true
+            }
         case FULFILLED:
             return {
                 ...state,
                 fetchedGifs: action.payload,
-                isLoading: false
+                isLoading: false,
+                fetchFailed: false
             }
 
         case TOGGLE_LIKE:

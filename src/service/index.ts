@@ -21,7 +21,7 @@ const getRandomID = () => {
 const search = (
     random_id: string, 
     weirdness: Number, 
-    s: string
+    s: string,
     ) => {
     return axios.get(SEARCH_URL, {
         params: {
@@ -40,7 +40,7 @@ const search = (
                 weirdness
             } 
         })
-        .catch(err => console.error(err))
+        .catch(e => console.error(e))
 }
 
 export {

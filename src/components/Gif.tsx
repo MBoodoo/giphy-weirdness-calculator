@@ -2,6 +2,8 @@ import React from "react"
 import { useDispatch } from "react-redux"
 import { toggleLike } from "../actions"
 import styled from "styled-components"
+import { motion } from "framer-motion"
+
 import { IGif } from "../reducers/gifReducer"
 
 const Gif: React.FC<IGif> = ({ 
@@ -39,10 +41,11 @@ const Gif: React.FC<IGif> = ({
             </Container>
 }
 
-const Container = styled.div`
+const Container = styled(motion.div)`
     position: relative;
     display: flex;
     flex: 1;
+    max-width: 25em;
 
     flex-direction: column;
     justify-self: center;
@@ -67,8 +70,8 @@ const Score = styled.div`
     background: linear-gradient(to right, #ffafbd, #ffc3a0);
     line-height: 30px;
     position: absolute;
-    right: 15%;
-    top: 15%;
+    right: 0;
+    top: 10%;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }`
 
