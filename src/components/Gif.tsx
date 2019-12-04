@@ -2,14 +2,15 @@ import React from "react"
 import { useDispatch } from "react-redux"
 import { toggleLike } from "../actions"
 import styled from "styled-components"
+import { IGif } from "../reducers/gifReducer"
 
-export interface IGif {
+export interface IGifProps {
     title: string
     url: string,
     id: string,
-    liked: boolean,
-    query: string
-    weirdness: Number
+    liked?: boolean,
+    query: string,
+    weirdness: number
 }
 
 const Gif: React.FC<IGif> = ({ 

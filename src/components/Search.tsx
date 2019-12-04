@@ -4,23 +4,18 @@ import styled from "styled-components"
 import { fetchGifs } from "../actions"
 
 const SearchArea:  React.FC = () => {
-    // Get Dispatch and select fetched gifs
+    // Get Dispatch and select fetched gifs (giReducer type is already implicit)
     const dispatch = useDispatch()
-    const currentId = useSelector(async (state: any) => await state.gifReducer.currentId, shallowEqual)
-
+    const currentId = useSelector((state: any) => state.gifReducer.currentId, shallowEqual)
+    const isLoading = useSelector((state: any) => state.gifReducer.isLoading)
     // Init Loading and Input State
     const [input, setInput] = useState('')
-    const [isLoading, setLoading] = useState(false)
 
     // Submit callback
     const handleSearch = async (e: any) => {
-        e.preventDefault()
-
         if (isLoading) {return}
-        setLoading(true)
-
+        e.preventDefault()
         dispatch(await fetchGifs(currentId, input))
-        return setLoading(false)
     }
 
     return  <Container>

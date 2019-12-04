@@ -1,32 +1,65 @@
 import { getRandomID } from "../service"
-import { TOGGLE_LIKE, FETCH_GIFS, CALC_WEIRDNESS } from "../actions"
+import { 
+    TOGGLE_LIKE, 
+    FETCHING,
+    FULFILLED,
+    CALC_WEIRDNESS,  
+    GifAction
+} from "../actions"
 
-export const initState = {
+// Move to .d.ts
+
+export interface IGif {
+    title: string
+    url: string,
+    id: string,
+    liked?: boolean, // Conditional for rendering liked in prop
+    query: string
+    weirdness: number
+}
+
+export interface IState{
+    readonly currentId: Promise<string>,
+    readonly fetchedGifs: IGif[],
+    readonly likedGifs: IGif[],
+    readonly weirdnessScore: number, 
+    readonly isLoading: Boolean
+}
+
+
+export const initState: IState = {
     currentId: getRandomID(),
     fetchedGifs: [],
     likedGifs: [],
     weirdnessScore: 0, 
+    isLoading: false
 }
 
-const gifReducer = (state = initState, action) => {
+const gifReducer = (state = initState, action: GifAction) => {
     switch (action.type) {
-        case FETCH_GIFS:
+        case FETCHING:
+            return {
+                ...state,
+                isLoading: true
+            }
+        case FULFILLED:
             return {
                 ...state,
                 fetchedGifs: action.payload,
+                isLoading: false
             }
 
         case TOGGLE_LIKE:
-            const toggle = payload => {
+            const toggle = (payload: IGif) => {
                 const idx = state.likedGifs
-                            .findIndex(obj => obj.query === payload.query)
+                            .findIndex((obj: IGif) => obj.query === payload.query)
                 
                 return idx === -1 ?
                 [...state.likedGifs, payload] :
                 [
                     ...state.likedGifs.slice(0, idx),
                     ...state.likedGifs.slice(idx + 1),
-                    ...(payload.id === state.likedGifs[idx].id ? 
+                    ...(payload.id === state.likedGifs[idx].id  ? 
                         [] : 
                         [payload]
                     )
@@ -41,7 +74,7 @@ const gifReducer = (state = initState, action) => {
             return {
                 ...state,
                 weirdnessScore: Math.round(
-                    state.likedGifs.reduce((acc, next) => 
+                    state.likedGifs.reduce((acc, next: IGif) => 
                         acc + next.weirdness
                     , 0) 
                     / state.likedGifs.length
@@ -51,4 +84,5 @@ const gifReducer = (state = initState, action) => {
             return state
     }
 }
+
 export default gifReducer

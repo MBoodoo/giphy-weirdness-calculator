@@ -18,7 +18,11 @@ const getRandomID = () => {
         .catch(err => console.error(err))
 }
 
-const search = (random_id, weirdness, s) => {
+const search = (
+    random_id: string, 
+    weirdness: Number, 
+    s: string
+    ) => {
     return axios.get(SEARCH_URL, {
         params: {
             api_key: API_KEY,
@@ -27,14 +31,14 @@ const search = (random_id, weirdness, s) => {
             s
         }
     })
-        .then(res => {
+        .then((res: any) => {
             return {
                 url: res.data.data.images.downsized_large.url, 
                 title: res.data.data.title,
                 id: uuid(),
                 query: s,
                 weirdness
-            }
+            } 
         })
         .catch(err => console.error(err))
 }

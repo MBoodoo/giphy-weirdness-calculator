@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useSelector, shallowEqual } from "react-redux"
+import { IGif } from "../reducers/gifReducer"
+
 import styled from "styled-components"
 import { motion, useMotionValue, useTransform } from "framer-motion"
-import Gif, { IGif } from "./Gif"
+import Gif from "./Gif"
 
 const Result:  React.FC = () => {
     // Select gifs and liked gifs from store

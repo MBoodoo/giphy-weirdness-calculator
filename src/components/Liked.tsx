@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { calcWeirdness } from "../actions"
+import { IGif } from "../reducers/gifReducer"
 import {
     BrowserRouter as Router,
     Switch,
@@ -8,7 +9,7 @@ import {
     Link
   } from "react-router-dom";
 import styled from "styled-components"
-import Gif, { IGif } from "./Gif"
+import Gif from "./Gif"
 
 const Liked: React.FC = () => {
 
@@ -36,6 +37,7 @@ const Liked: React.FC = () => {
                 }
                 query={gif.query}
                 weirdness={gif.weirdness}
+                key={gif.id}
              />
     }) 
     
