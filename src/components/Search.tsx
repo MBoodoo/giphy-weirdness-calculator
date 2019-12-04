@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector, shallowEqual } from "react-redux"
 import styled from "styled-components"
 import { fetchGifs } from "../actions"
@@ -8,27 +8,50 @@ const SearchArea:  React.FC = () => {
     const dispatch = useDispatch()
     const currentId = useSelector((state: any) => state.gifReducer.currentId, shallowEqual)
     const isLoading = useSelector((state: any) => state.gifReducer.isLoading)
-    // Init Loading and Input State
-    const [input, setInput] = useState('')
 
-    // Submit callback
+    // Init Input and Error State
+    const [input, setInput] = useState('')
+    const [error, setError] = useState<string | boolean>('')
+
     const handleSearch = async (e: any) => {
-        if (isLoading) {return}
         e.preventDefault()
-        dispatch(await fetchGifs(currentId, input))
+        
+        // Sanitize and throttle submission
+        if (isLoading) {
+            return
+        } else if (input.replace(/[^A-Z0-9]/ig, '') === "") {
+            setError("Please fill it in with words and numbers only")
+            return
+        }
+
+        try {
+            dispatch(await fetchGifs(currentId, input))
+            setError(false)
+        } catch (e) {
+            console.error(e)
+            setError(e)
+        }
     }
 
     return  <Container>
                 <Desc>
                     Find out how weird you are
                 </Desc>
+
                 <Form>
                     <input value={input} onChange={e => setInput(e.target.value)}/>
                     <button onClick={e => handleSearch(e)}>Search</button>
                 </Form>
-                {isLoading && <Loading>Content is Loading</Loading>}
+
+                {isLoading && <div>Content is Loading</div>}
+                {error && 
+                    <div> 
+                        There was an error loading content:
+                        <br/>  
+                        <span style={{color: `red`}}>{error}</span> 
+                    </div>
+                }
             </Container>
-           
 }
 
 const Desc = styled.p`
@@ -36,12 +59,20 @@ const Desc = styled.p`
 `
 const Form = styled.form`
     flex: 3;
-    & > button {
-        
+    & > input {
+        font-size: 20px;
     }
-`
-const Loading = styled.div`
+    
+    & > button {
+       margin: 1em;
+       padding: .5em;
+       font-size: 16px;
+       background: linear-gradient(to left, #ffafbd, #ffc3a0);
 
+       &:hover {
+        cursor: pointer;
+       }
+    }
 `
 
 const Container = styled.div`

@@ -42,14 +42,14 @@ const Result:  React.FC = () => {
 
     return  <Container>
                 {gifs[weirdIdx]}
-                <Slider>
-                    <Info>
+                <Info>
                     {gifs.length > 0 ?
                             `Weirdness: ${weirdIdx}` :
                             `Make a search then move the 
                             knob to set your desired weirdness`
                     }
-                    </Info>
+                </Info>
+                <Slider>
                     <Knob   
                         drag="x" 
                         style={{ x }}
@@ -64,10 +64,18 @@ const Result:  React.FC = () => {
             </Container>
 }
 
+const Container = styled.div`
+    grid-area: result;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    padding: 15px;
+`
 const Info = styled.div`
     position: absolute;
-    transform: translateY(-5em);
-    width: 100%;
+    top: 5%;
+    right: 5%;
+    font-size: 24px;
 `
 const Knob = styled(motion.div)`
     border-radius: 50%;
@@ -86,10 +94,5 @@ const Slider = styled.div`
     border-radius: 10px;
 
 ` 
-const Container = styled.div`
-    grid-area: result;
-    display: flex;
-    justify-content: space-around;
 
-`
 export default Result 
