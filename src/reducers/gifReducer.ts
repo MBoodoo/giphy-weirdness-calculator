@@ -8,6 +8,8 @@ import {
     GifAction
 } from "../actions"
 
+import { toggleByQuery, reduceAvgByProp } from "../utils"
+
 // Move to *.d.ts
 
 export interface IGif {
@@ -63,36 +65,17 @@ const gifReducer = (state = initState, action: GifAction) => {
             }
 
         case TOGGLE_LIKE:
-            const toggle = (payload: IGif) => {
-                const idx = state.likedGifs
-                            .findIndex((obj: IGif) => obj.query === payload.query)
-                
-                return idx === -1 ?
-                [...state.likedGifs, payload] :
-                [
-                    ...state.likedGifs.slice(0, idx),
-                    ...state.likedGifs.slice(idx + 1),
-                    ...(payload.id === state.likedGifs[idx].id  ? 
-                        [] : 
-                        [payload]
-                    )
-                ]
-            }
-
             return {
                 ...state,
-                likedGifs: toggle(action.payload)
+                likedGifs: toggleByQuery(action.payload, state)
             } 
+
         case CALC_WEIRDNESS: 
             return {
                 ...state,
-                weirdnessScore: Math.round(
-                    state.likedGifs.reduce((acc, next: IGif) => 
-                        acc + next.weirdness
-                    , 0) 
-                    / state.likedGifs.length
-                )
+                weirdnessScore: reduceAvgByProp(state)
             }
+
         default: 
             return state
     }
