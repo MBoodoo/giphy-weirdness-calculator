@@ -1,7 +1,7 @@
 import axios from "axios"
 import uuid from "uuid"
 
-const API_KEY = "yzXM4tFFVbMqnsOOQMBQr2XPjHjTUNZz"
+const API_KEY = "yzXM4tFFVbMqnsOOQMBQr2XPjHjTUNZz" // will store key as secret inside sessionStorage
 
 const RANDOM_ID_URL = "https://api.giphy.com/v1/randomid"
 const SEARCH_URL = "https://api.giphy.com/v1/gifs/translate"
